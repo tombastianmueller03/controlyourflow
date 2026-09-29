@@ -72,6 +72,11 @@ jobs:
           (cd build/ipa && zip -qry ../Flow.ipa Payload)
           ls -lh build/Flow.ipa
 
+      - name: Show build errors
+        if: failure()
+        run: |
+          grep -nE "error:|Stack dump|Apple Swift version|While (evaluating|emitting)|✘" build-test.log | head -60 || true
+
       - name: Upload test results on failure
         if: failure()
         uses: actions/upload-artifact@v4
