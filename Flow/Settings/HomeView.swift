@@ -39,6 +39,9 @@ struct HomeView: View {
                 }
 
                 Section {
+                    NavigationLink(value: Destination.setup) {
+                        Label("Automation einrichten", systemImage: "wand.and.stars")
+                    }
                     NavigationLink(value: Destination.stats) {
                         Label("Statistik", systemImage: "chart.bar")
                     }
@@ -55,6 +58,7 @@ struct HomeView: View {
             }
             .navigationDestination(for: Destination.self) { destination in
                 switch destination {
+                case .setup: SetupGuideView()
                 case .stats: StatsView()
                 case .defaults: DefaultsView()
                 }
@@ -74,6 +78,7 @@ struct HomeView: View {
     }
 
     enum Destination: Hashable {
+        case setup
         case stats
         case defaults
     }

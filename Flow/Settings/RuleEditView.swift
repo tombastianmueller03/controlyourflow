@@ -32,6 +32,11 @@ struct RuleEditView: View {
             ChallengeSettingsSection(settings: $rule.settings)
 
             Section {
+                NavigationLink {
+                    SetupGuideView(ruleID: rule.id)
+                } label: {
+                    Label("Automation einrichten", systemImage: "wand.and.stars")
+                }
                 Button("Pause jetzt ausprobieren") {
                     router.startChallenge(for: rule)
                 }
