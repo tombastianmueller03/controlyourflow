@@ -1,0 +1,74 @@
+name: ControlYourFlow
+
+options:
+  bundleIdPrefix: com.tbmueller
+  developmentLanguage: de
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1"
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  Flow:
+    type: application
+    platform: iOS
+    sources:
+      - Flow
+    info:
+      path: Flow/Info.plist
+      properties:
+        CFBundleDisplayName: Flow
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: false
+        LSRequiresIPhoneOS: true
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # Only needed for canOpenURL (installed-check in the rule editor).
+        # Opening via UIApplication.open works without these entries.
+        # Must stay <= 25 entries once built with the iOS 27 SDK.
+        LSApplicationQueriesSchemes:
+          - instagram
+          - youtube
+          - snssdk1233
+          - twitter
+          - fb
+          - reddit
+          - snapchat
+          - whatsapp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.tbmueller.controlyourflow
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        SWIFT_EMIT_LOC_STRINGS: YES
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    scheme:
+      testTargets:
+        - FlowTests
+
+  FlowTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - FlowTests
+    dependencies:
+      - target: Flow
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.tbmueller.controlyourflow.tests

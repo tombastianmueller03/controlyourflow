@@ -1,0 +1,7 @@
+// Shared build settings. Personal signing settings (your Apple team ID)
+// go into Config/Local.xcconfig, which is not committed. See README.
+//
+// Example Local.xcconfig:
+//   DEVELOPMENT_TEAM = ABCDE12345
+
+#include? "Local.xcconfig"
