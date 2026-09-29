@@ -2,25 +2,9 @@ import Foundation
 import Testing
 @testable import Flow
 
-/// Deterministic RNG so failures are reproducible.
-struct SeededGenerator: RandomNumberGenerator {
-    private var state: UInt64
-
-    init(seed: UInt64) { state = seed }
-
-    mutating func next() -> UInt64 {
-        // SplitMix64
-        state &+= 0x9E37_79B9_7F4A_7C15
-        var z = state
-        z = (z ^ (z >> 30)) &* 0xBF58_476D_1CE4_E5B9
-        z = (z ^ (z >> 27)) &* 0x94D0_49BB_1331_11EB
-        return z ^ (z >> 31)
-    }
-}
-
 struct MathProblemGeneratorTests {
     private func problems(_ difficulty: Difficulty, count: Int = 2000, seed: UInt64 = 42) -> [MathProblem] {
-        var rng = SeededGenerator(seed: seed)
+        var rng = SplitMix64(seed: seed)
         let generator = MathProblemGenerator(difficulty: difficulty)
         return (0..<count).map { _ in generator.makeProblem(using: &rng) }
     }
@@ -117,7 +101,7 @@ struct MathProblemGeneratorTests {
 
     @Test(arguments: Difficulty.allCases)
     func noRepeatsWithinARound(difficulty: Difficulty) {
-        var rng = SeededGenerator(seed: 7)
+        var rng = SplitMix64(seed: 7)
         let generator = MathProblemGenerator(difficulty: difficulty)
         var used: Set<String> = []
         for _ in 0..<ChallengeSettings.taskCountRange.upperBound {

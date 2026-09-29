@@ -18,7 +18,7 @@ struct ChallengeSessionTests {
         settings.penaltySeconds = penalty
         return ChallengeSession(
             ruleID: UUID(), ruleName: "Test", settings: settings,
-            rng: SeededGenerator(seed: 3), clock: { clock.now }
+            seed: 3, clock: { clock.now }
         )
     }
 

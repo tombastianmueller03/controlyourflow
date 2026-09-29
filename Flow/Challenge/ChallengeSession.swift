@@ -47,14 +47,14 @@ final class ChallengeSession: Identifiable {
     @ObservationIgnored private var lockedUntil: Date?
     @ObservationIgnored private var usedKeys: Set<String> = []
     @ObservationIgnored private let generator: MathProblemGenerator
-    @ObservationIgnored private var rng: any RandomNumberGenerator
+    @ObservationIgnored private var rng: SplitMix64
     @ObservationIgnored private let clock: () -> Date
 
     init(
         ruleID: UUID,
         ruleName: String,
         settings: ChallengeSettings,
-        rng: any RandomNumberGenerator = SystemRandomNumberGenerator(),
+        seed: UInt64 = UInt64.random(in: .min ... .max),
         clock: @escaping () -> Date = Date.init
     ) {
         self.ruleID = ruleID
@@ -62,7 +62,7 @@ final class ChallengeSession: Identifiable {
         self.settings = settings
         self.clock = clock
         let generator = MathProblemGenerator(difficulty: settings.difficulty)
-        var rng = rng
+        var rng = SplitMix64(seed: seed)
         let first = generator.makeProblem(using: &rng)
         self.generator = generator
         self.rng = rng
