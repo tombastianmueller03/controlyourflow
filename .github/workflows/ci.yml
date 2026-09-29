@@ -61,11 +61,12 @@ jobs:
         run: |
           APP="build/Flow.xcarchive/Products/Applications/Flow.app"
           test -d "$APP"
-          if [ -d "$APP/Metadata.appintents" ]; then
-            echo "App Intents metadata present"
-          else
-            echo "::warning::Metadata.appintents missing (expected until the App Intent exists)"
+          # Without this folder Shortcuts would not list the "Flow starten" action.
+          if [ ! -d "$APP/Metadata.appintents" ]; then
+            echo "::error::Metadata.appintents missing from Flow.app"
+            exit 1
           fi
+          ls "$APP/Metadata.appintents"
           mkdir -p build/ipa/Payload
           cp -R "$APP" build/ipa/Payload/
           (cd build/ipa && zip -qry ../Flow.ipa Payload)
