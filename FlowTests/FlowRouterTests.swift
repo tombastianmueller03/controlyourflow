@@ -119,6 +119,21 @@ struct FlowRouterTests {
         #expect(router.passes.isValid(for: rule.id, at: clock.now))
     }
 
+    @Test func missingTargetShowsSetupHintInsteadOfLettingThrough() throws {
+        let (router, rule) = makeRouter()
+        #expect(router.handleUnconfiguredTrigger() == .showSetupHint)
+        #expect(router.notice == .automationIncomplete)
+        #expect(router.activeSession == nil)
+
+        // A running pause is not replaced by the hint.
+        router.notice = nil
+        _ = router.handleTrigger(ruleID: rule.id)
+        let session = try #require(router.activeSession)
+        #expect(router.handleUnconfiguredTrigger() == .resumeChallenge)
+        #expect(router.activeSession?.id == session.id)
+        #expect(router.notice == nil)
+    }
+
     @Test func unknownRule() {
         let (router, _) = makeRouter()
         #expect(router.handleTrigger(ruleID: UUID()) == .unknownRule)

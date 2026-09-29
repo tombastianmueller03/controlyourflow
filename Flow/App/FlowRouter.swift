@@ -16,6 +16,8 @@ final class FlowRouter {
         /// Double trigger while a pause for the same app is running.
         case resumeChallenge
         case unknownRule
+        /// The automation has no "Ziel-App" set: show a hint instead of letting the app through.
+        case showSetupHint
     }
 
     enum Notice: Equatable {
@@ -23,6 +25,8 @@ final class FlowRouter {
         case notNow(ruleName: String)
         /// The target app could not be opened after a passed pause.
         case openFailed(ruleName: String, urlScheme: String)
+        /// The automation ran without a "Ziel-App".
+        case automationIncomplete
     }
 
     private(set) var activeSession: ChallengeSession?
@@ -65,6 +69,14 @@ final class FlowRouter {
 
         startChallenge(for: rule, at: now)
         return .startChallenge
+    }
+
+    /// Called when the automation runs without a "Ziel-App". Flow cannot know
+    /// which app was opened, so it asks the user to finish the setup.
+    func handleUnconfiguredTrigger() -> TriggerDecision {
+        if activeSession != nil { return .resumeChallenge }
+        notice = .automationIncomplete
+        return .showSetupHint
     }
 
     func startChallenge(for rule: AppRule, at now: Date? = nil) {

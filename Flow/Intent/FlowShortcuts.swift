@@ -2,17 +2,20 @@ import AppIntents
 
 /// Registers "Flow starten" as an App Shortcut.
 ///
-/// Not strictly needed for the action to appear in Shortcuts, but calling
-/// `updateAppShortcutParameters()` at launch asks the system to (re)read the
-/// app's intents. UNVERIFIED: whether this makes the action appear for apps
-/// installed via SideStore, where it was missing in the first device test.
+/// Calling `updateAppShortcutParameters()` at launch asks the system to
+/// (re)read the app's intents. On the first device test (SideStore install)
+/// the action only appeared in Shortcuts after this and the German
+/// localization were added (v0.1.1).
 struct FlowShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: StartFlowIntent(),
             phrases: [
+                // Parameterized phrases make Shortcuts offer one ready-made
+                // entry per app rule, with "Ziel-App" already filled in.
+                "\(.applicationName) starten für \(\.$target)",
+                "Pause vor \(\.$target) mit \(.applicationName)",
                 "\(.applicationName) starten",
-                "Pause mit \(.applicationName)",
             ],
             shortTitle: "Flow starten",
             systemImageName: "hourglass"

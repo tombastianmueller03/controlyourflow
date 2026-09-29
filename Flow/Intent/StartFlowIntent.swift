@@ -16,8 +16,11 @@ struct StartFlowIntent: AppIntent {
     // continueInForeground (iOS 26 API, replaces openAppWhenRun).
     static let supportedModes: IntentModes = [.background, .foreground(.dynamic)]
 
+    /// Optional on purpose: a required parameter that is not set in the
+    /// automation makes Shortcuts ask at run time, and dismissing that prompt
+    /// skips the pause. Without a value Flow shows a setup hint instead.
     @Parameter(title: "Ziel-App")
-    var target: RuleEntity
+    var target: RuleEntity?
 
     static var parameterSummary: some ParameterSummary {
         Summary("Flow starten für \(\.$target)")
@@ -27,7 +30,7 @@ struct StartFlowIntent: AppIntent {
 
     init() {}
 
-    init(target: RuleEntity) {
+    init(target: RuleEntity?) {
         self.target = target
     }
 
@@ -35,12 +38,17 @@ struct StartFlowIntent: AppIntent {
     // (about 30 s). The pause itself runs in the UI after we return.
     @MainActor
     func perform() async throws -> some IntentResult {
-        switch router.handleTrigger(ruleID: target.id) {
+        let decision = if let target {
+            router.handleTrigger(ruleID: target.id)
+        } else {
+            router.handleUnconfiguredTrigger()
+        }
+        switch decision {
         case .letThrough:
             return .result()
         case .unknownRule:
             throw FlowIntentError.ruleNotFound
-        case .startChallenge, .resumeChallenge:
+        case .startChallenge, .resumeChallenge, .showSetupHint:
             if systemContext.currentMode == .background {
                 // UNVERIFIED on device: whether the system allows switching to the
                 // foreground while the target app is opening under an automation.

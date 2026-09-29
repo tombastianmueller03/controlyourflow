@@ -35,6 +35,7 @@ struct NoticeView: View {
         switch notice {
         case .notNow: "leaf"
         case .openFailed: "exclamationmark.triangle"
+        case .automationIncomplete: "wand.and.stars"
         }
     }
 
@@ -42,6 +43,7 @@ struct NoticeView: View {
         switch notice {
         case .notNow: String(localized: "Nicht jetzt")
         case .openFailed(let name, _): String(localized: "\(name) ließ sich nicht öffnen")
+        case .automationIncomplete: String(localized: "Automation nicht fertig eingerichtet")
         }
     }
 
@@ -51,6 +53,8 @@ struct NoticeView: View {
             String(localized: "Gute Entscheidung. \(name) bleibt zu. Du kannst Flow jetzt einfach schließen.")
         case .openFailed(let name, let scheme):
             String(localized: "Die Pause zählt trotzdem. Vermutlich ist \(name) nicht installiert oder die Adresse „\(scheme)“ stimmt nicht. Du kannst sie in den Einstellungen der App-Regel ändern oder \(name) jetzt selbst öffnen.")
+        case .automationIncomplete:
+            String(localized: "In der Automation fehlt die Ziel-App. Öffne Kurzbefehle → Automation, tippe auf die Aktion „Flow starten“ und wähle bei „Ziel-App“ die passende App. Die Aktion heißt dann z. B. „Flow starten für YouTube“.")
         }
     }
 }

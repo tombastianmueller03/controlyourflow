@@ -63,8 +63,8 @@ struct SetupGuideView: View {
             SetupStep(number: 3, text: "Scrolle zu „App“ und tippe darauf.")
             SetupStep(number: 4, text: "Tippe bei „App“ auf „Auswählen“, wähle \(rule.name) und tippe auf „Fertig“. Nur „Wird geöffnet“ soll markiert sein.")
             SetupStep(number: 5, text: "Wähle „Sofort ausführen“ und schalte „Bei Ausführung mitteilen“ aus. Tippe auf „Weiter“.")
-            SetupStep(number: 6, text: "Tippe auf „Neuer leerer Kurzbefehl“, dann auf „Aktion hinzufügen“. Suche nach „Flow starten“ und tippe darauf.")
-            SetupStep(number: 7, text: "Tippe in der Aktion auf „Ziel-App“ und wähle \(rule.name). Wichtig: Ohne diese Auswahl läuft die Automation nicht.")
+            SetupStep(number: 6, text: "Tippe auf „Neuer leerer Kurzbefehl“, dann auf „Aktion hinzufügen“. Suche nach „Flow“ und wähle „Flow starten für \(rule.name)“. Gibt es den Eintrag nicht, nimm „Flow starten“.")
+            SetupStep(number: 7, text: "Kontrolle: In der Automation muss „Flow starten für \(rule.name)“ stehen. Steht dort nur „Flow starten“, tippe darauf und wähle bei „Ziel-App“ \(rule.name). Sonst zeigt Flow nur einen Einrichtungs-Hinweis.")
             SetupStep(number: 8, text: "Tippe auf „Fertig“. Das war’s.")
 
             Button {
