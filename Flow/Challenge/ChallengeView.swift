@@ -7,6 +7,7 @@ struct ChallengeView: View {
     var onCancel: () -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var reportedCompletion = false
 
     private static let letters = ["A", "B", "C", "D"]
@@ -14,24 +15,19 @@ struct ChallengeView: View {
     var body: some View {
         VStack(spacing: 24) {
             header
-            BreathingRing(progress: session.timeProgress) {
-                VStack(spacing: 4) {
-                    Text("\(min(session.correctCount, session.settings.taskCount))/\(session.settings.taskCount)")
-                        .font(.title2.weight(.semibold))
-                        .monospacedDigit()
-                    Text(Self.format(session.remainingTime))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .monospacedDigit()
+            if verticalSizeClass == .compact {
+                // Landscape on iPhone: ring and task side by side.
+                HStack(spacing: 32) {
+                    progressRing
+                    mainContent
                 }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(progressLabel)
+                .frame(maxHeight: .infinity)
+            } else {
+                progressRing
+                Spacer(minLength: 0)
+                mainContent
+                Spacer(minLength: 0)
             }
-            .frame(maxWidth: 170, maxHeight: 170)
-
-            Spacer(minLength: 0)
-            mainContent
-            Spacer(minLength: 0)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -54,6 +50,23 @@ struct ChallengeView: View {
     }
 
     // MARK: - Parts
+
+    private var progressRing: some View {
+        BreathingRing(progress: session.timeProgress) {
+            VStack(spacing: 4) {
+                Text("\(min(session.correctCount, session.settings.taskCount))/\(session.settings.taskCount)")
+                    .font(.title2.weight(.semibold))
+                    .monospacedDigit()
+                Text(Self.format(session.remainingTime))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(progressLabel)
+        }
+        .frame(maxWidth: 170, maxHeight: 170)
+    }
 
     private var header: some View {
         HStack {
@@ -119,6 +132,11 @@ struct ChallengeView: View {
                             .minimumScaleFactor(0.6)
                             .lineLimit(1)
                         Spacer(minLength: 0)
+                        if let symbol = feedbackSymbol(for: index) {
+                            Image(systemName: symbol)
+                                .font(.title3.weight(.semibold))
+                                .accessibilityHidden(true)
+                        }
                     }
                     .padding(.horizontal, 18)
                     .frame(maxWidth: .infinity, minHeight: 64)
@@ -151,6 +169,16 @@ struct ChallengeView: View {
             .green.opacity(0.25)
         default:
             Color(.secondarySystemBackground)
+        }
+    }
+
+    /// Shape cue in addition to color (Differentiate Without Color).
+    private func feedbackSymbol(for index: Int) -> String? {
+        switch session.feedback {
+        case .correct(let correct) where correct == index: "checkmark"
+        case .wrong(let chosen, _) where chosen == index: "xmark"
+        case .wrong(_, let correct) where correct == index: "checkmark"
+        default: nil
         }
     }
 
