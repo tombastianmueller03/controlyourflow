@@ -15,6 +15,7 @@ struct FlowApp: App {
         // UNVERIFIED on device: that App.init also runs when the system launches
         // the app in the background just to perform the intent.
         AppDependencyManager.shared.add(dependency: router)
+        FlowShortcuts.updateAppShortcutParameters()
     }
 
     var body: some Scene {
@@ -24,6 +25,8 @@ struct FlowApp: App {
                 .environment(ruleStore)
                 .environment(stats)
                 .environment(passes)
+                // The "Ziel-App" choices come from the rules; let Shortcuts refresh them.
+                .onChange(of: ruleStore.rules) { FlowShortcuts.updateAppShortcutParameters() }
         }
     }
 }

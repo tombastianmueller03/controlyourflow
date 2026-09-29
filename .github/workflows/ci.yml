@@ -67,6 +67,12 @@ jobs:
             exit 1
           fi
           ls "$APP/Metadata.appintents"
+          # Shortcuts reads action titles from the app's localizations.
+          if [ ! -d "$APP/de.lproj" ]; then
+            echo "::error::de.lproj missing from Flow.app"
+            exit 1
+          fi
+          ls "$APP/de.lproj"
           mkdir -p build/ipa/Payload
           cp -R "$APP" build/ipa/Payload/
           (cd build/ipa && zip -qry ../Flow.ipa Payload)

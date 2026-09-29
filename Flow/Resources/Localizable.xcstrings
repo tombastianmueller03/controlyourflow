@@ -1,7 +1,66 @@
 {
-  "sourceLanguage" : "de",
-  "strings" : {
-
+  "sourceLanguage": "de",
+  "strings": {
+    "Flow starten": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flow starten"
+          }
+        }
+      }
+    },
+    "Ziel-App": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel-App"
+          }
+        }
+      }
+    },
+    "Zeigt eine Mathe-Pause, bevor die gewählte App geöffnet wird. Gedacht für die Automation „App wird geöffnet“.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeigt eine Mathe-Pause, bevor die gewählte App geöffnet wird. Gedacht für die Automation „App wird geöffnet“."
+          }
+        }
+      }
+    },
+    "Diese Ziel-App gibt es in Flow nicht mehr. Bitte die Automation neu einrichten.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Ziel-App gibt es in Flow nicht mehr. Bitte die Automation neu einrichten."
+          }
+        }
+      }
+    },
+    "Flow konnte die Pause nicht anzeigen. Öffne Flow, um sie zu starten.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flow konnte die Pause nicht anzeigen. Öffne Flow, um sie zu starten."
+          }
+        }
+      }
+    },
+    "Nicht jetzt": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht jetzt"
+          }
+        }
+      }
+    }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
